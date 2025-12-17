@@ -41,7 +41,7 @@ namespace AutoVault.Models
         public double Mpg { get; set; }
 
         [Required]
-        [StringLength(20)]
+        [StringLength(40)]
         public string Transmission { get; set; } = "Automatic";
 
         public bool HasCarbonFiber { get; set; }
