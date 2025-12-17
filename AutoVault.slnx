@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AutoVault/AutoVault.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>

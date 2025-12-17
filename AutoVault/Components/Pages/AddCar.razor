@@ -1,0 +1,20 @@
+﻿@page "/cars/new"
+@using AutoVault.Models
+@inject AutoVault.Services.ICarRepository CarRepository
+@inject NavigationManager Navigation
+
+<h3 class="car-page-title">Add New Car</h3>
+
+<CarForm Car="_newCar" ButtonText="Add Car" OnSubmit="SaveCar" OnCancel="Cancel" />
+
+@code {
+    private Car _newCar = new();
+
+    private async Task SaveCar(Car car)
+    {
+        await CarRepository.AddCarAsync(car);
+        Navigation.NavigateTo("/cars");
+    }
+
+    private void Cancel() => Navigation.NavigateTo("/cars");
+}

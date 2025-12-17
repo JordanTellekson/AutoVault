@@ -1,0 +1,28 @@
+﻿<div class="modal-backdrop" style="@(IsVisible ? "display:flex;" : "display:none;")">
+    <div class="modal-content">
+        <p>@Message</p>
+        <div class="modal-actions">
+            <button class="custom-button" @onclick="() => Close(true)">Yes</button>
+            <button class="custom-button" @onclick="() => Close(false)">No</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Message { get; set; } = "Are you sure?";
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+
+    private bool IsVisible { get; set; }
+
+    public void Show()
+    {
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    private async Task Close(bool confirmed)
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync(confirmed);
+    }
+}

@@ -1,0 +1,16 @@
+﻿@inherits LayoutComponentBase
+
+<div class="main-layout">
+    <header class="app-header">
+        <nav class="nav-menu">
+            <ul>
+                <li><NavLink href="/" Match="NavLinkMatch.All">Home</NavLink></li>
+                <li><NavLink href="/cars">Cars</NavLink></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        @Body
+    </main>
+</div>

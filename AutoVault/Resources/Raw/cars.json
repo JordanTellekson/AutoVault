@@ -1,0 +1,116 @@
+[
+  {
+    "Id": "00000000-0000-0000-0000-000000000001",
+    "Make": "Toyota",
+    "Model": "Camry",
+    "Year": 2021,
+    "Color": "White",
+    "Trim": "XSE",
+    "Vin": "1HGCM82633A004352",
+    "Mileage": 15000,
+    "Price": 27000,
+    "Torque": 184,
+    "Mpg": 29,
+    "Transmission": "Automatic",
+    "HasCarbonFiber": false,
+    "ImagePath": "https://www.cnet.com/a/img/resize/b9cb3466480927557fb89f3558e9b92acd390508/hub/2021/08/20/257caf0a-f3a2-45db-9c70-d6ed50a85e6f/2021-toyota-camry-trd-ogi-1.jpg?auto=webp&fit=crop&height=675&width=1200",
+    "Engine": {
+      "Cylinders": 4,
+      "Turbocharged": false,
+      "Supercharged": false,
+      "DisplacementLiters": 2.5,
+      "FuelType": "Gasoline"
+    },
+    "Performance": {
+      "Horsepower": 206,
+      "ZeroToSixty": 7.6,
+      "TopSpeed": 135,
+      "Drivetrain": "FWD"
+    },
+    "Maintenance": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000011",
+        "Date": "2023-06-01T00:00:00",
+        "Description": "Oil Change",
+        "MileageAtService": 5000,
+        "Cost": 39.99
+      }
+    ]
+  },
+  {
+    "Id": "00000000-0000-0000-0000-000000000003",
+    "Make": "Mercedes-Benz",
+    "Model": "S-Class",
+    "Year": 2023,
+    "Color": "Black",
+    "Trim": "S 580 4MATIC",
+    "Vin": "WDDUG8CB0JA004352",
+    "Mileage": 5000,
+    "Price": 120000,
+    "Torque": 516,
+    "Mpg": 22,
+    "Transmission": "Automatic",
+    "HasCarbonFiber": true,
+    "ImagePath": "https://www.chicagomotorcars.com/imagetag/10495/6/l/Used-2023-Mercedes-Benz-S580-4MATIC-AMG-LINE-WARMTH-COMFORT-PACKAGE-FORGIATO-WHEELS-3D-TECH-PACK-1677527734.jpg",
+    "Engine": {
+      "Cylinders": 8,
+      "Turbocharged": true,
+      "Supercharged": false,
+      "DisplacementLiters": 4.0,
+      "FuelType": "Gasoline"
+    },
+    "Performance": {
+      "Horsepower": 496,
+      "ZeroToSixty": 4.5,
+      "TopSpeed": 155,
+      "Drivetrain": "AWD"
+    },
+    "Maintenance": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000031",
+        "Date": "2024-01-15T00:00:00",
+        "Description": "Initial Inspection",
+        "MileageAtService": 1000,
+        "Cost": 349.99
+      }
+    ]
+  },
+  {
+    "Id": "00000000-0000-0000-0000-000000000004",
+    "Make": "Ferrari",
+    "Model": "812 Superfast",
+    "Year": 2021,
+    "Color": "Rosso Corsa",
+    "Trim": "Mansory Stallone",
+    "Vin": "ZFF83CLA0M0254321",
+    "Mileage": 3200,
+    "Price": 575000,
+    "Torque": 604,
+    "Mpg": 14,
+    "Transmission": "7-Speed Dual-Clutch Automatic",
+    "HasCarbonFiber": true,
+    "ImagePath": "https://www.mansory.com/cdn-cgi/image/format=avif,quality=90/https://cdn.prod.website-files.com/661d6e0d2e84ef511db18f17/6818c137e312f2327c680290_MANSORY%2520Stallone%2520812-Gallery-001.webp",
+    "Engine": {
+      "Cylinders": 12,
+      "Turbocharged": false,
+      "Supercharged": false,
+      "DisplacementLiters": 6.5,
+      "FuelType": "Gasoline"
+    },
+    "Performance": {
+      "Horsepower": 830,
+      "ZeroToSixty": 2.7,
+      "TopSpeed": 211,
+      "Drivetrain": "RWD"
+    },
+    "Maintenance": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000041",
+        "Date": "2023-04-10T00:00:00",
+        "Description": "Annual Service & ECU Calibration Check",
+        "MileageAtService": 2500,
+        "Cost": 4899.99
+      }
+    ]
+  }
+]

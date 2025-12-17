@@ -1,0 +1,37 @@
+﻿@page "/cars/edit/{CarId:guid}"
+@using AutoVault.Models
+@inject AutoVault.Services.ICarRepository CarRepository
+@inject NavigationManager Navigation
+
+<h3 class="car-page-title">Edit @_car?.Make @_car?.Model</h3>
+
+@if (_car is null)
+{
+    <p>Loading…</p>
+}
+else
+{
+    <CarForm Car="_car" ButtonText="Save Changes" OnSubmit="SaveCar" OnCancel="Cancel" />
+}
+
+@code {
+    [Parameter] public Guid CarId { get; set; }
+    private Car? _car;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _car = await CarRepository.GetCarByIdAsync(CarId);
+        if (_car is null)
+            Navigation.NavigateTo("/cars");
+    }
+
+    private async Task SaveCar(Car car)
+    {
+        if (_car is null) return;
+
+        await CarRepository.UpdateCarAsync(car);
+        Navigation.NavigateTo("/cars");
+    }
+
+    private void Cancel() => Navigation.NavigateTo("/cars");
+}

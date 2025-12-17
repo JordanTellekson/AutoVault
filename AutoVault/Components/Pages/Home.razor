@@ -1,0 +1,22 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+
+<div class="home-hero">
+    <div class="home-content">
+        <h1 class="home-title">AutoVault</h1>
+        <p class="home-subtitle">
+            Your personal garage. Explore specs, performance, and history.
+        </p>
+
+        <button class="primary-cta" @onclick="GoToCars">
+            View Collection
+        </button>
+    </div>
+</div>
+
+@code {
+    private void GoToCars()
+    {
+        Navigation.NavigateTo("/cars");
+    }
+}

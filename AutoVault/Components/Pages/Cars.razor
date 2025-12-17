@@ -1,0 +1,86 @@
+﻿@page "/cars"
+@using AutoVault.Models
+@inject AutoVault.Services.ICarRepository CarRepository
+@inject NavigationManager Navigation
+
+<ConfirmDialog @ref="_confirmDialog"
+               Message="Are you sure you want to delete this vehicle?"
+               OnClose="OnDeleteConfirmed" />
+
+<h2 class="car-page-title">Your Collection</h2>
+
+@if (_cars is null)
+{
+    <p>Loading…</p>
+}
+else if (_cars.Count == 0)
+{
+    <p>No cars available.</p>
+}
+else
+{
+    <div class="add-car-button-container">
+        <button class="add-car-button" @onclick="AddCar">+</button>
+    </div>
+
+        <div class="car-grid">
+            @foreach (var car in _cars)
+            {
+                <div class="car-card">
+                    <NavLink href="@($"/cars/{car.Id}")">
+                        <img src="@car.ImagePath" alt="@car.Make @car.Model" class="car-image" />
+                    </NavLink>
+
+                    <div class="car-details">
+                        <h4>@car.Year @car.Make @car.Model @car.Trim @car.Performance.Drivetrain</h4>
+                        @if (car.Vin == string.Empty)
+                        {
+                            <p>No VIN Provided</p>
+                        }
+                        else
+                        {
+                            <p>VIN: @car.Vin</p>
+                        }
+                        <p><strong>Mileage:</strong> @car.Mileage.ToString("N0")</p>
+
+                        <div class="value-actions">
+                            <h4><strong>Value:</strong> $@car.Price.ToString("N2")</h4>
+                            <div class="card-buttons">
+                                <button class="custom-button" @onclick="() => EditCar(car.Id)">Edit</button>
+                                <button class="custom-button delete-button" @onclick="() => ConfirmDelete(car.Id)">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+}
+
+@code {
+    private IReadOnlyList<Car>? _cars;
+    private ConfirmDialog? _confirmDialog;
+    private Guid _carToDelete;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _cars = await CarRepository.GetCarsAsync();
+    }
+
+    private void AddCar() => Navigation.NavigateTo("/cars/new");
+
+    private void EditCar(Guid carId) => Navigation.NavigateTo($"/cars/edit/{carId}");
+
+    private void ConfirmDelete(Guid carId)
+    {
+        _carToDelete = carId;
+        _confirmDialog?.Show();
+    }
+
+    private async Task OnDeleteConfirmed(bool confirmed)
+    {
+        if (!confirmed) return;
+
+        await CarRepository.DeleteCarAsync(_carToDelete);
+        _cars = await CarRepository.GetCarsAsync();
+    }
+}

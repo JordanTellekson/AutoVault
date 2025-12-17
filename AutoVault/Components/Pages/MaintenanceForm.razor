@@ -1,0 +1,65 @@
+﻿@using AutoVault.Models
+@inject NavigationManager Navigation
+
+<EditForm Model="_record" OnValidSubmit="HandleValidSubmit" class="maintenance-form">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="validation-summary" />
+
+    <div class="form-group">
+        <label>Date:</label>
+        <InputDate @bind-Value="_record.Date" class="custom-input" />
+    </div>
+
+    <div class="form-group">
+        <label>Description:</label>
+        <InputTextArea @bind-Value="_record.Description" class="custom-input description-input" />
+    </div>
+
+    <div class="form-group">
+        <label>Mileage at Service:</label>
+        <InputNumber @bind-Value="_record.MileageAtService" class="custom-input" />
+    </div>
+
+    <div class="form-group">
+        <label>Cost:</label>
+        <InputNumber @bind-Value="_record.Cost" class="custom-input" step="0.01" />
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="custom-button">@ButtonText</button>
+        <button type="button" class="custom-button cancel-button" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public MaintenanceRecord Record { get; set; } = new();
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback<MaintenanceRecord> OnSubmit { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    private MaintenanceRecord _record = new();
+
+    protected override void OnParametersSet()
+    {
+        _record = new MaintenanceRecord
+        {
+            Id = Record.Id,
+            Date = Record.Date,
+            Description = Record.Description,
+            MileageAtService = Record.MileageAtService,
+            Cost = Record.Cost
+        };
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (OnSubmit.HasDelegate)
+            await OnSubmit.InvokeAsync(_record);
+    }
+
+    private async Task Cancel()
+    {
+        if (OnCancel.HasDelegate)
+            await OnCancel.InvokeAsync();
+    }
+}

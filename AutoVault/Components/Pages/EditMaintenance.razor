@@ -1,0 +1,56 @@
+﻿@page "/cars/{CarId:guid}/maintenance/edit/{RecordId:guid}"
+@using AutoVault.Models
+@inject AutoVault.Services.ICarRepository CarRepository
+@inject NavigationManager Navigation
+
+<h3 class="record-title">Edit Maintenance Record</h3>
+
+@if (_car is null || _record is null)
+{
+    <p>Loading…</p>
+}
+else
+{
+    <MaintenanceForm Record="_record" ButtonText="Save Changes" OnSubmit="SaveRecord" OnCancel="Cancel" />
+}
+
+@code {
+    [Parameter] public Guid CarId { get; set; }
+    [Parameter] public Guid RecordId { get; set; }
+
+    private Car? _car;
+    private MaintenanceRecord? _record;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _car = await CarRepository.GetCarByIdAsync(CarId);
+        if (_car is null)
+        {
+            Navigation.NavigateTo("/cars");
+            return;
+        }
+
+        _record = _car?.Maintenance?.FirstOrDefault(r => r.Id == RecordId);
+        if (_record is null)
+            Navigation.NavigateTo($"/cars/{CarId}");
+    }
+
+    private async Task SaveRecord(MaintenanceRecord record)
+    {
+        if (_car is null || _record is null) return;
+
+        // Update the existing record
+        _record.Date = record.Date;
+        _record.Description = record.Description;
+        _record.MileageAtService = record.MileageAtService;
+        _record.Cost = record.Cost;
+
+        await CarRepository.UpdateCarAsync(_car);
+        Navigation.NavigateTo($"/cars/{CarId}");
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo($"/cars/{CarId}");
+    }
+}

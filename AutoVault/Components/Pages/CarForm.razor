@@ -1,0 +1,214 @@
+﻿@using AutoVault.Models
+
+<EditForm Model="_car" OnValidSubmit="HandleValidSubmit" class="car-form">
+    <DataAnnotationsValidator />
+
+    <!-- Basic Info -->
+    <h3 class="car-form-h3">Basic Info</h3>
+
+    <div class="form-group">
+        <label>Make:</label>
+        <InputText @bind-Value="_car.Make" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Make)" />
+    </div>
+
+    <div class="form-group">
+        <label>Model:</label>
+        <InputText @bind-Value="_car.Model" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Model)" />
+    </div>
+
+    <div class="form-group">
+        <label>Year:</label>
+        <InputNumber @bind-Value="_car.Year" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Year)" />
+    </div>
+
+    <div class="form-group">
+        <label>Trim:</label>
+        <InputText @bind-Value="_car.Trim" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Trim)" />
+    </div>
+
+    <div class="form-group">
+        <label>Color:</label>
+        <InputText @bind-Value="_car.Color" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Color)" />
+    </div>
+
+    <div class="form-group">
+        <label>VIN:</label>
+        <InputText @bind-Value="_car.Vin" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Vin)" />
+    </div>
+
+    <!-- Pricing & Specs -->
+    <h3 class="car-form-h3">Pricing & Specs</h3>
+
+    <div class="form-group">
+        <label>Price:</label>
+        <InputNumber @bind-Value="_car.Price" class="custom-input" step="0.01" />
+        <ValidationMessage For="@(() => _car.Price)" />
+    </div>
+
+    <div class="form-group">
+        <label>Mileage:</label>
+        <InputNumber @bind-Value="_car.Mileage" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Mileage)" />
+    </div>
+
+    <div class="form-group">
+        <label>Torque (lb-ft):</label>
+        <InputNumber @bind-Value="_car.Torque" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Torque)" />
+    </div>
+
+    <div class="form-group">
+        <label>MPG:</label>
+        <InputNumber @bind-Value="_car.Mpg" class="custom-input" step="0.1" />
+        <ValidationMessage For="@(() => _car.Mpg)" />
+    </div>
+
+    <div class="form-group">
+        <label>Transmission:</label>
+        <InputText @bind-Value="_car.Transmission" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Transmission)" />
+    </div>
+
+    <div class="form-group-inline">
+        <label>Has Carbon Fiber?</label>
+        <InputCheckbox @bind-Value="_car.HasCarbonFiber" />
+    </div>
+
+    <!-- Engine Specs -->
+    <h3 class="car-form-h3">Engine</h3>
+
+    <div class="form-group">
+        <label>Cylinders:</label>
+        <InputNumber @bind-Value="_car.Engine.Cylinders" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Engine.Cylinders)" />
+    </div>
+
+    <div class="form-group-inline">
+        <label>Turbocharged?</label>
+        <InputCheckbox @bind-Value="_car.Engine.Turbocharged" />
+
+        <label>Supercharged?</label>
+        <InputCheckbox @bind-Value="_car.Engine.Supercharged" />
+    </div>
+
+    <div class="form-group">
+        <label>Displacement (Liters):</label>
+        <InputNumber @bind-Value="_car.Engine.DisplacementLiters" class="custom-input" step="0.1" />
+        <ValidationMessage For="@(() => _car.Engine.DisplacementLiters)" />
+    </div>
+
+    <div class="form-group">
+        <label>Fuel Type:</label>
+        <InputText @bind-Value="_car.Engine.FuelType" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Engine.FuelType)" />
+    </div>
+
+    <!-- Performance Specs -->
+    <h3 class="car-form-h3">Performance</h3>
+
+    <div class="form-group">
+        <label>Horsepower:</label>
+        <InputNumber @bind-Value="_car.Performance.Horsepower" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Performance.Horsepower)" />
+    </div>
+
+    <div class="form-group">
+        <label>0-60 mph (s):</label>
+        <InputNumber @bind-Value="_car.Performance.ZeroToSixty" class="custom-input" step="0.1" />
+        <ValidationMessage For="@(() => _car.Performance.ZeroToSixty)" />
+    </div>
+
+    <div class="form-group">
+        <label>Top Speed (mph):</label>
+        <InputNumber @bind-Value="_car.Performance.TopSpeed" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Performance.TopSpeed)" />
+    </div>
+
+    <div class="form-group">
+        <label>Drivetrain:</label>
+        <InputText @bind-Value="_car.Performance.Drivetrain" class="custom-input" />
+        <ValidationMessage For="@(() => _car.Performance.Drivetrain)" />
+    </div>
+
+    <!-- Media -->
+    <h3 class="car-form-h3">Media</h3>
+
+    <div class="form-group">
+        <label>Image URL/Path:</label>
+        <InputText @bind-Value="_car.ImagePath" class="custom-input" />
+        <ValidationMessage For="@(() => _car.ImagePath)" />
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+        <button type="submit" class="custom-button">@ButtonText</button>
+        <button type="button" class="custom-button cancel-button" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public Car Car { get; set; } = new();
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback<Car> OnSubmit { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    private Car _car = new();
+
+    protected override void OnParametersSet()
+    {
+        _car = new Car
+        {
+            Id = Car.Id,
+            Make = Car.Make,
+            Model = Car.Model,
+            Year = Car.Year,
+            Color = Car.Color,
+            Trim = Car.Trim,
+            Vin = Car.Vin,
+            Mileage = Car.Mileage,
+            Price = Car.Price,
+            Torque = Car.Torque,
+            Mpg = Car.Mpg,
+            Transmission = Car.Transmission,
+            HasCarbonFiber = Car.HasCarbonFiber,
+            ImagePath = Car.ImagePath,
+
+            Engine = new EngineSpecs
+            {
+                Cylinders = Car.Engine.Cylinders,
+                Turbocharged = Car.Engine.Turbocharged,
+                Supercharged = Car.Engine.Supercharged,
+                DisplacementLiters = Car.Engine.DisplacementLiters,
+                FuelType = Car.Engine.FuelType
+            },
+
+            Performance = new PerformanceSpecs
+            {
+                Horsepower = Car.Performance.Horsepower,
+                ZeroToSixty = Car.Performance.ZeroToSixty,
+                TopSpeed = Car.Performance.TopSpeed,
+                Drivetrain = Car.Performance.Drivetrain
+            },
+
+            Maintenance = Car.Maintenance.ToList()
+        };
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (OnSubmit.HasDelegate)
+            await OnSubmit.InvokeAsync(_car);
+    }
+
+    private async Task Cancel()
+    {
+        if (OnCancel.HasDelegate)
+            await OnCancel.InvokeAsync();
+    }
+}
