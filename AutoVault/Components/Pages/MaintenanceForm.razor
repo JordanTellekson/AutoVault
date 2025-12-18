@@ -32,13 +32,22 @@
 </EditForm>
 
 @code {
+    // Input record passed from parent component
     [Parameter] public MaintenanceRecord Record { get; set; } = new();
+
+    // Text for the submit button
     [Parameter] public string ButtonText { get; set; } = "Save";
+
+    // Callback to invoke when the form is submitted
     [Parameter] public EventCallback<MaintenanceRecord> OnSubmit { get; set; }
+
+    // Callback to invoke when the user cancels
     [Parameter] public EventCallback OnCancel { get; set; }
 
+    // Local copy of the record for editing
     private MaintenanceRecord _record = new();
 
+    // Initialize the local record when parameters are set
     protected override void OnParametersSet()
     {
         _record = new MaintenanceRecord
@@ -51,12 +60,14 @@
         };
     }
 
+    // Trigger OnSubmit callback when the form is validly submitted
     private async Task HandleValidSubmit()
     {
         if (OnSubmit.HasDelegate)
             await OnSubmit.InvokeAsync(_record);
     }
 
+    // Trigger OnCancel callback when the user cancels
     private async Task Cancel()
     {
         if (OnCancel.HasDelegate)

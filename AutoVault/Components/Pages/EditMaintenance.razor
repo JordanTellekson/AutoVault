@@ -15,40 +15,49 @@ else
 }
 
 @code {
+    // Route parameters for car and maintenance record IDs
     [Parameter] public Guid CarId { get; set; }
     [Parameter] public Guid RecordId { get; set; }
 
+    // Local references to the car and the maintenance record being edited
     private Car? _car;
     private MaintenanceRecord? _record;
 
+    // Load the car and the specific maintenance record on initialization
     protected override async Task OnInitializedAsync()
     {
         _car = await CarRepository.GetCarByIdAsync(CarId);
+
+        // Redirect to collection if the car is not found
         if (_car is null)
         {
             Navigation.NavigateTo("/cars");
             return;
         }
 
+        // Find the specific maintenance record; redirect to car details if not found
         _record = _car?.Maintenance?.FirstOrDefault(r => r.Id == RecordId);
         if (_record is null)
             Navigation.NavigateTo($"/cars/{CarId}");
     }
 
+    // Update the maintenance record and persist changes
     private async Task SaveRecord(MaintenanceRecord record)
     {
         if (_car is null || _record is null) return;
 
-        // Update the existing record
         _record.Date = record.Date;
         _record.Description = record.Description;
         _record.MileageAtService = record.MileageAtService;
         _record.Cost = record.Cost;
 
         await CarRepository.UpdateCarAsync(_car);
+
+        // Navigate back to car details page after saving
         Navigation.NavigateTo($"/cars/{CarId}");
     }
 
+    // Cancel editing and return to the car details page
     private void Cancel()
     {
         Navigation.NavigateTo($"/cars/{CarId}");

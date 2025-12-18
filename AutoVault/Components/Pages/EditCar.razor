@@ -15,9 +15,13 @@ else
 }
 
 @code {
+    // Route parameter for the car being edited
     [Parameter] public Guid CarId { get; set; }
+
+    // Local reference to the car being edited
     private Car? _car;
 
+    // Load the car on initialization; redirect to collection if not found
     protected override async Task OnInitializedAsync()
     {
         _car = await CarRepository.GetCarByIdAsync(CarId);
@@ -25,6 +29,7 @@ else
             Navigation.NavigateTo("/cars");
     }
 
+    // Handle form submission: update the car and return to the car collection
     private async Task SaveCar(Car car)
     {
         if (_car is null) return;
@@ -33,5 +38,6 @@ else
         Navigation.NavigateTo("/cars");
     }
 
+    // Handle form cancellation: navigate back to the car collection without saving
     private void Cancel() => Navigation.NavigateTo("/cars");
 }

@@ -57,30 +57,42 @@ else
 }
 
 @code {
+    // List of cars in the collection
     private IReadOnlyList<Car>? _cars;
+
+    // Reference to the confirmation dialog component
     private ConfirmDialog? _confirmDialog;
+
+    // ID of the car selected for deletion
     private Guid _carToDelete;
 
+    // Load the list of cars on component initialization
     protected override async Task OnInitializedAsync()
     {
         _cars = await CarRepository.GetCarsAsync();
     }
 
+    // Navigate to the add new car page
     private void AddCar() => Navigation.NavigateTo("/cars/new");
 
+    // Navigate to the edit car page for the selected car
     private void EditCar(Guid carId) => Navigation.NavigateTo($"/cars/edit/{carId}");
 
+    // Trigger the confirmation dialog for deleting a car
     private void ConfirmDelete(Guid carId)
     {
         _carToDelete = carId;
         _confirmDialog?.Show();
     }
 
+    // Handle the confirmation result and delete the car if confirmed
     private async Task OnDeleteConfirmed(bool confirmed)
     {
         if (!confirmed) return;
 
         await CarRepository.DeleteCarAsync(_carToDelete);
+
+        // Refresh the car list after deletion
         _cars = await CarRepository.GetCarsAsync();
     }
 }

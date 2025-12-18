@@ -9,17 +9,23 @@
 </div>
 
 @code {
+    // Message displayed in the confirmation dialog
     [Parameter] public string Message { get; set; } = "Are you sure?";
+
+    // Callback invoked when the dialog is closed; passes true if confirmed, false if cancelled
     [Parameter] public EventCallback<bool> OnClose { get; set; }
 
+    // Tracks visibility of the modal
     private bool IsVisible { get; set; }
 
+    // Show the modal
     public void Show()
     {
         IsVisible = true;
-        StateHasChanged();
+        StateHasChanged(); // Force UI update
     }
 
+    // Close the modal and invoke the OnClose callback
     private async Task Close(bool confirmed)
     {
         IsVisible = false;

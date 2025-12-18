@@ -15,38 +15,50 @@ else
 }
 
 @code {
+    // The Car ID parameter from the route
     [Parameter] public Guid CarId { get; set; }
+
+    // Local reference to the car being edited
     private Car? _car;
+
+    // New maintenance record being added
     private MaintenanceRecord _newRecord = new();
 
+    // Load the car data when the component initializes
     protected override async Task OnInitializedAsync()
     {
         _car = await CarRepository.GetCarByIdAsync(CarId);
 
+        // Redirect if car not found
         if (_car is null)
         {
             Navigation.NavigateTo("/cars");
             return;
         }
 
+        // Ensure the maintenance list exists
         _car.Maintenance ??= new List<MaintenanceRecord>();
     }
 
+    // Add the new maintenance record to the car and update the repository
     private async Task SaveRecord(MaintenanceRecord record)
     {
         if (_car is null) return;
 
         _car.Maintenance.Add(record);
 
+        // Sort records by date
         _car.Maintenance = _car.Maintenance
                        .OrderBy(r => r.Date)
                        .ToList();
 
         await CarRepository.UpdateCarAsync(_car);
 
+        // Navigate back to the car details page
         Navigation.NavigateTo($"/cars/{CarId}");
     }
 
+    // Cancel adding a record and return to car details page
     private void Cancel()
     {
         Navigation.NavigateTo($"/cars/{CarId}");

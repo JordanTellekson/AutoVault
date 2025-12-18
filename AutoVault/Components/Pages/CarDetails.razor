@@ -90,47 +90,61 @@ else
 }
 
 @code {
+    // The Car ID parameter from the route
     [Parameter] public Guid CarId { get; set; }
 
+    // Local reference to the car being displayed
     private Car? _car;
+
+    // Stores the ID of the maintenance record to be deleted
     private Guid _recordToDelete;
+
+    // Reference to the confirmation dialog component
     private ConfirmDialog? _confirmDialog;
 
+    // Load car data when the component initializes
     protected override async Task OnInitializedAsync()
     {
         _car = await CarRepository.GetCarByIdAsync(CarId);
 
+        // Sort maintenance records by date if they exist
         if (_car?.Maintenance != null)
-        _car.Maintenance = _car.Maintenance
-                               .OrderBy(r => r.Date)
-                               .ToList();
+            _car.Maintenance = _car.Maintenance
+                                   .OrderBy(r => r.Date)
+                                   .ToList();
     }
 
+    // Navigate back to the main car collection page
     private void GoBack()
     {
         Navigation.NavigateTo("/cars");
     }
 
+    // Navigate to the Add Maintenance page for this car
     private void AddMaintenance()
     {
         Navigation.NavigateTo($"/cars/{CarId}/maintenance/new");
     }
 
+    // Navigate to the Edit Maintenance page for a specific record
     private void EditMaintenance(Guid recordId)
     {
         Navigation.NavigateTo($"/cars/{CarId}/maintenance/edit/{recordId}");
     }
 
+    // Open the confirmation dialog before deleting a maintenance record
     private void ConfirmDelete(Guid recordId)
     {
         _recordToDelete = recordId;
         _confirmDialog?.Show();
     }
 
+    // Handle the result of the confirmation dialog
     private async Task OnDeleteConfirmed(bool confirmed)
     {
         if (!confirmed) return;
 
+        // Find and remove the record if it exists
         var record = _car?.Maintenance.FirstOrDefault(r => r.Id == _recordToDelete);
         if (record == null) return;
 

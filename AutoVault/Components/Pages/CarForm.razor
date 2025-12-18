@@ -153,13 +153,22 @@
 </EditForm>
 
 @code {
+    // Car object passed from parent component
     [Parameter] public Car Car { get; set; } = new();
+
+    // Text for the submit button
     [Parameter] public string ButtonText { get; set; } = "Save";
+
+    // Event callback to invoke when the form is submitted
     [Parameter] public EventCallback<Car> OnSubmit { get; set; }
+
+    // Event callback to invoke when the cancel button is clicked
     [Parameter] public EventCallback OnCancel { get; set; }
 
+    // Local copy of the car for editing
     private Car _car = new();
 
+    // Initialize or update local car data when parameters change
     protected override void OnParametersSet()
     {
         _car = new Car
@@ -196,16 +205,19 @@
                 Drivetrain = Car.Performance.Drivetrain
             },
 
+            // Copy maintenance records for editing
             Maintenance = Car.Maintenance.ToList()
         };
     }
 
+    // Handle form submission
     private async Task HandleValidSubmit()
     {
         if (OnSubmit.HasDelegate)
             await OnSubmit.InvokeAsync(_car);
     }
 
+    // Handle form cancellation
     private async Task Cancel()
     {
         if (OnCancel.HasDelegate)

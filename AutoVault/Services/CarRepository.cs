@@ -8,28 +8,36 @@ public sealed class CarRepository : ICarRepository
     private const string FileName = "cars.json";
     private IReadOnlyList<Car>? _cache;
 
+    // Path to the writable JSON file
     private string WritableFilePath => Path.Combine(FileSystem.AppDataDirectory, FileName);
 
+    // Ensure the JSON file exists in a writable location
     private async Task EnsureFileExistsAsync()
     {
         if (!File.Exists(WritableFilePath))
         {
             try
             {
+                // Attempt to copy the pre-filled JSON from the app package
                 using var packageStream = await FileSystem.OpenAppPackageFileAsync(FileName);
                 using var fileStream = File.Create(WritableFilePath);
                 await packageStream.CopyToAsync(fileStream);
+                Console.WriteLine($"Copied {FileName} to AppDataDirectory.");
             }
             catch
             {
+                // If package file not found, create an empty JSON file
                 await File.WriteAllTextAsync(WritableFilePath, "[]");
+                Console.WriteLine($"Created empty {FileName} in AppDataDirectory.");
             }
         }
     }
 
+    // Load cars from the writable JSON file
     private async Task<List<Car>> LoadCarsAsync()
     {
         await EnsureFileExistsAsync();
+
         var json = await File.ReadAllTextAsync(WritableFilePath);
         var cars = JsonSerializer.Deserialize<List<Car>>(json, new JsonSerializerOptions
         {
@@ -40,6 +48,7 @@ public sealed class CarRepository : ICarRepository
         return cars;
     }
 
+    // Save cars to the writable JSON file
     private async Task SaveToFileAsync(List<Car> cars)
     {
         var json = JsonSerializer.Serialize(cars, new JsonSerializerOptions { WriteIndented = true });
@@ -62,6 +71,13 @@ public sealed class CarRepository : ICarRepository
     public async Task UpdateCarAsync(Car car)
     {
         var carsList = (_cache ?? await LoadCarsAsync()).ToList();
+
+        // Clean the ImagePath to remove hidden characters or quotes
+        if (!string.IsNullOrWhiteSpace(car.ImagePath))
+        {
+            car.ImagePath = car.ImagePath.Trim().Trim('"').Replace("\u00A0", "").Replace("\u200B", "");
+        }
+
         var index = carsList.FindIndex(c => c.Id == car.Id);
         if (index >= 0)
             carsList[index] = car;
@@ -74,6 +90,13 @@ public sealed class CarRepository : ICarRepository
     public async Task AddCarAsync(Car car)
     {
         var carsList = (_cache ?? await LoadCarsAsync()).ToList();
+
+        // Clean the ImagePath
+        if (!string.IsNullOrWhiteSpace(car.ImagePath))
+        {
+            car.ImagePath = car.ImagePath.Trim().Trim('"').Replace("\u00A0", "").Replace("\u200B", "");
+        }
+
         carsList.Add(car);
         await SaveToFileAsync(carsList);
     }

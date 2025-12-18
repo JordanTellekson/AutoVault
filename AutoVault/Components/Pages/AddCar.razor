@@ -8,13 +8,16 @@
 <CarForm Car="_newCar" ButtonText="Add Car" OnSubmit="SaveCar" OnCancel="Cancel" />
 
 @code {
+    // New car object bound to the form
     private Car _newCar = new();
 
+    // Save the new car to the repository and navigate to the car list
     private async Task SaveCar(Car car)
     {
         await CarRepository.AddCarAsync(car);
         Navigation.NavigateTo("/cars");
     }
 
+    // Cancel adding a car and return to the car list
     private void Cancel() => Navigation.NavigateTo("/cars");
 }
