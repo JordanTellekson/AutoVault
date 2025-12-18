@@ -15,7 +15,7 @@ namespace AutoVault.Models
         [StringLength(50)]
         public string Model { get; set; } = string.Empty;
 
-        [Range(1886, 2100, ErrorMessage = "Year must be between 1886 and 2026")]
+        [Range(1886, 2026, ErrorMessage = "Year must be between 1886 and 2026")]
         public int Year { get; set; }
 
         [Required]
